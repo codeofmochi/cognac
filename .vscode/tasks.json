@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"detail": "Run the front-end ViteJS dev server",
+			"label": "Run front-end",
+			"problemMatcher": [],
+			"path": "cognac-frontend",
+			"script": "dev",
+			"type": "npm",
+		},
+		{
+			"command": "composer install && symfony server:start",
+			"detail": "Run the back-end PHP Symfony dev server",
+			"label": "Run back-end",
+			"problemMatcher": [],
+			"options": {
+				"cwd": "${workspaceFolder}/cognac-backend"
+			},
+			"type": "shell",
+		}
+	]
+}

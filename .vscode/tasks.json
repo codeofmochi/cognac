@@ -10,7 +10,7 @@
 			"type": "npm",
 		},
 		{
-			"command": "composer install && symfony server:start",
+			"command": "composer install && php bin/console doctrine:migrations:migrate --no-interaction && symfony server:start",
 			"detail": "Run the back-end PHP Symfony dev server",
 			"label": "Run back-end",
 			"problemMatcher": [],

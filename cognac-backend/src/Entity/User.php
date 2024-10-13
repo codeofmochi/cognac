@@ -25,6 +25,12 @@ class User implements UserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastLinkRequestedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastLoginAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -83,5 +89,29 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getLastLinkRequestedAt(): ?\DateTimeImmutable
+    {
+        return $this->lastLinkRequestedAt;
+    }
+
+    public function setLastLinkRequestedAt(?\DateTimeImmutable $lastLinkRequestedAt): static
+    {
+        $this->lastLinkRequestedAt = $lastLinkRequestedAt;
+
+        return $this;
+    }
+
+    public function getLastLoginAt(): ?\DateTimeImmutable
+    {
+        return $this->lastLoginAt;
+    }
+
+    public function setLastLoginAt(?\DateTimeImmutable $lastLoginAt): static
+    {
+        $this->lastLoginAt = $lastLoginAt;
+
+        return $this;
     }
 }

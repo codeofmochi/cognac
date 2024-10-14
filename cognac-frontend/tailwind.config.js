@@ -1,14 +1,18 @@
+const defaultTheme = require("tailwindcss/defaultTheme")
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
+    "./index.html",
     "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
+    fontFamily: {
+      sans: ["Geist", ...defaultTheme.fontFamily.sans],
+      mono: ['"Geist Mono"', ...defaultTheme.fontFamily.sans],
+    },
     container: {
       center: true,
       padding: "2rem",

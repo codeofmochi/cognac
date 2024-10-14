@@ -37,6 +37,7 @@ services:
       PMA_HOST: db
       PMA_USER: devuser
       PMA_PASSWORD: devpassword
+      APACHE_PORT: 8070
 
   mailcatcher:
     image: dockage/mailcatcher:0.9.0

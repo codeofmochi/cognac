@@ -9,7 +9,7 @@
 		8000,
 		5173,
 		"db:3306",
-		"phpmyadmin:80",
+		"phpmyadmin:8070",
 		"mailcatcher:1080",
 		"mailcatcher:1025",
 	],

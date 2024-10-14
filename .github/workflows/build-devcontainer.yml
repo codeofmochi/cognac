@@ -21,13 +21,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: Build the devcontainer
         run: |
           docker build \
             --file .devcontainer/Dockerfile \
             --tag devcontainer:latest \
+            --build-arg BUILDKIT_CACHE=/tmp/.buildx-cache \
             .
+
       - name: Run a command in the devcontainer
         run: |
-          docker run --rm my-devcontainer:latest bash -c "node --version && php bin/console --version"
-
+          docker run --rm devcontainer:latest bash -c "node --version && php bin/console --version"

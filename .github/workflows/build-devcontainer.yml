@@ -1,0 +1,33 @@
+name: Check DevContainer Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 * * *" # This will run every day at midnight UTC
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build the devcontainer
+        run: |
+          docker build \
+            --file .devcontainer/Dockerfile \
+            --tag devcontainer:latest \
+            .
+      - name: Run a command in the devcontainer
+        run: |
+          docker run --rm my-devcontainer:latest bash -c "node --version && php bin/console --version"
+

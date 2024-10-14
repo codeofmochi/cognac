@@ -39,4 +39,6 @@ jobs:
 
       - name: Run a command in the devcontainer
         run: |
-          docker run --rm devcontainer:latest bash -c "node --version && php bin/console --version"
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \  # Mount the repository to /workspace
+            devcontainer:latest bash -c "npm --version && php /workspace/bin/console --version"

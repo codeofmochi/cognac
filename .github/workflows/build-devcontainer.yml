@@ -13,32 +13,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: docker/setup-buildx-action@v3
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+          driver-opts: network=host
 
       - name: Build the devcontainer
-        run: |
-          docker build \
-            --file .devcontainer/Dockerfile \
-            --tag devcontainer:latest \
-            --build-arg BUILDKIT_CACHE=/tmp/.buildx-cache \
-            .
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: .devcontainer/Dockerfile
+          push: true
+          tags: localhost:5000/cognac/devcontainer:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run a command in the devcontainer
         run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/workspace \  # Mount the repository to /workspace
-            devcontainer:latest bash -c "npm --version && php /workspace/bin/console --version"
+          docker run --rm localhost:5000/cognac/devcontainer:latest \
+            bash -c "node --version && php --version"

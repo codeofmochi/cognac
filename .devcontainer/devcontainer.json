@@ -5,11 +5,13 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspace",
-	// For use with PHP or Apache (e.g.php -S localhost:8080 or apache2ctl start)
 	"forwardPorts": [
 		8000,
-		3306,
-		5173
+		5173,
+		"db:3306",
+		"phpmyadmin:8070",
+		"mailcatcher:1080",
+		"mailcatcher:1025",
 	],
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {

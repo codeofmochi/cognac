@@ -1,3 +1,3 @@
 # cognac
 
-A sport shooting club manager
+A sport shooting club manager 🎯

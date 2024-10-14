@@ -13,12 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SecurityController extends AbstractController
 {
-    #[Route('/login', name: 'login', methods: ['POST'])]
+    #[Route('/login', name: 'login', methods: ['GET', 'POST'])]
     public function requestLoginLink(
         EntityManagerInterface $entityManager,
         LoginLinkHandlerInterface $loginLinkHandler,
@@ -27,7 +28,14 @@ class SecurityController extends AbstractController
         TranslatorInterface $translator,
         UserRepository $userRepository,
         ApiResponseBuilder $apiResponse,
+        UrlGeneratorInterface $urlGenerator,
     ): Response {
+        if ($request->isMethod("GET")) {
+            // GET request is sent by a user browser so redirect them to app login
+            $appRoute = $urlGenerator->generate('app');
+            return $this->redirect("{$appRoute}/login");
+        }
+
         $email = $request->getPayload()->get('email');
         $user = $userRepository->findOneBy(['email' => $email]);
 
@@ -59,7 +67,7 @@ class SecurityController extends AbstractController
             'message' => $translator->trans('auth.login.email_sent'),
         ]);
     }
-    
+
     #[Route('/login_check', name: 'login_check')]
     public function check(): never
     {

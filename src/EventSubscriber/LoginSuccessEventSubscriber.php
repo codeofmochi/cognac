@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
-class LoginSuccessEventListener implements EventSubscriberInterface
+class LoginSuccessEventSubscriber implements EventSubscriberInterface
 {
     private EntityManagerInterface $entityManager;
 

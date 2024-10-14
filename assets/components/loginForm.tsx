@@ -37,7 +37,7 @@ const LoginForm = () => {
               <div className="grid gap-1 pt-1">
                 <p>
                   Consultez votre boîte mail et cliquez sur le lien de connexion
-                  dans le mail reçu. Vous pouvez ensuite fermer cet onglet.
+                  dans le mail reçu. Vous pouvez ensuite fermer cette page.
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Pas reçu d'email? Vérifiez votre boîte des spams 🔥

@@ -1,0 +1,47 @@
+name: Check DevContainer Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 * * *" # This will run every day at midnight UTC
+  workflow_dispatch:  # Enable manual triggering of the workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: network=host
+
+      - name: Build the devcontainer
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: .devcontainer/Dockerfile
+          push: true
+          tags: localhost:5000/cognac/devcontainer:latest
+          # on pull_request save time by caching layers between commits
+          # otherwise, check build thoroughly so disable cache
+          cache-from: ${{ github.event_name == 'pull_request' && 'type=gha' || '' }}
+          cache-to: ${{ github.event_name == 'pull_request' && 'type=gha,mode=max' || '' }}
+
+      - name: Run a command in the devcontainer
+        run: |
+          docker run --rm localhost:5000/cognac/devcontainer:latest \
+            bash -c "node --version && php --version"

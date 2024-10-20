@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,12 +27,12 @@ class SecurityController extends AbstractController
         TranslatorInterface $translator,
         UserRepository $userRepository,
         ApiResponseBuilder $apiResponse,
-        UrlGeneratorInterface $urlGenerator,
     ): Response {
         if ($request->isMethod("GET")) {
             // GET request is sent by a user browser so redirect them to app login
-            $appRoute = $urlGenerator->generate('app');
-            return $this->redirect("{$appRoute}/login");
+            $appRoute = $this->generateUrl('app');
+            $appLogin = "{$appRoute}/login?reason=reauth";
+            return $this->redirect($appLogin);
         }
 
         $email = $request->getPayload()->get('email');

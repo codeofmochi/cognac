@@ -23,14 +23,7 @@ interface CognacError<ErrorCode> {
 }
 
 class Api {
-  private readonly baseUrl
-
-  constructor() {
-    if (typeof import.meta.env.VITE_API_BASE_URL !== "string") {
-      throw new Error("Environment variable API_BASE_URL is not defined: " + import.meta.env.VITE_API_BASE_URL)
-    }
-    this.baseUrl = import.meta.env.VITE_API_BASE_URL
-  }
+  private readonly baseUrl = import.meta.env.API_BASE_URL || `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
 
   private isSymfonyError(
     data: ReturnType<JSON["parse"]>,
@@ -67,13 +60,13 @@ class Api {
       const error = await response
         .clone()
         .json()
-        .catch(() => response.text())
+        .catch(async () => { throw new Error(await response.text()) })
       if (this.isCognacError<ErrorCode>(error)) {
         throw new ApiError<ErrorCode>(error.code, error.message)
       } else if (this.isSymfonyError(error)) {
         throw new Error(error.detail)
       } else {
-        throw new Error(typeof error === "string" ? error : JSON.stringify(error))
+        throw new Error(JSON.stringify(error))
       }
     }
 

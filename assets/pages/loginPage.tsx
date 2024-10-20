@@ -1,10 +1,18 @@
 import { LoginForm } from "@/components/loginForm"
 
+const LoginReasons: {[key: string]: string} = {
+  reauth: "Veuillez vous reconnecter"
+}
+
+const getReason = (key?: string | null) => (!key) ? null : LoginReasons[key]
+
 const LoginPage = () => {
+  const searchParams = new URLSearchParams(window.location.search)
+
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
-        <LoginForm />
+        <LoginForm reason={getReason(searchParams.get("reason"))} />
       </div>
 
       <div

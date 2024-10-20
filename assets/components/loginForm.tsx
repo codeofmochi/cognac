@@ -2,6 +2,7 @@ import { useLogin } from "@/hooks/useLogin"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faCircleExclamation,
+  faCircleInfo,
   faCircleNotch,
   faEnvelope,
 } from "@fortawesome/free-solid-svg-icons"
@@ -11,7 +12,14 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 
-const LoginForm = () => {
+type LoginFormProps = {
+  /**
+   * An optional reason message that explains to the user why the login form is shown
+   */
+  reason?: string | null
+}
+
+const LoginForm = ({ reason }: LoginFormProps) => {
   const login = useLogin()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -29,8 +37,16 @@ const LoginForm = () => {
           Saisissez votre e-mail pour vous connecter
         </p>
 
+        {reason && (
+          <Alert className="mt-4" variant="info">
+            <AlertDescription>
+              <p className="text-balance"><FontAwesomeIcon icon={faCircleInfo} className="mr-2"/>{reason}</p>
+            </AlertDescription>
+          </Alert>
+        )}
+
         {login.isSuccess && (
-          <Alert className="mt-4">
+          <Alert className="mt-4" variant="info">
             <FontAwesomeIcon icon={faEnvelope} className="h-4 w-4" />
             <AlertTitle>E-mail de connexion envoyé!</AlertTitle>
             <AlertDescription>
